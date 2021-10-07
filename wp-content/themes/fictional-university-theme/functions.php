@@ -1,4 +1,5 @@
 <?php
+	//callback function for adding assets on the web site
 	function assets_files(){
 		wp_enqueue_script('main-university-js', get_theme_file_uri('/js/script-bundled.js'), NULL,
 			'1.0', true);
@@ -11,7 +12,8 @@
 
 	add_action('wp_enqueue_scripts', 'assets_files');
 
+	// callback function for adding features on the websites
 	function university_features(){
 		add_theme_support('title-tag');
-}
+	}
 	add_action('after_setup_theme', 'university_features');
