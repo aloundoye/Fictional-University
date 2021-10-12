@@ -9,11 +9,12 @@
 		wp_enqueue_style('index', get_stylesheet_directory_uri().'/index.css', false, null);
 		wp_enqueue_style('university_main_styles', get_stylesheet_uri());
 	}
-
-	add_action('wp_enqueue_scripts', 'assets_files');
-
 	// callback function for adding features on the websites
 	function university_features(){
 		add_theme_support('title-tag');
 	}
+
 	add_action('after_setup_theme', 'university_features');
+	//add assets files
+	add_action('wp_enqueue_scripts', 'assets_files');
+	//add custom post
