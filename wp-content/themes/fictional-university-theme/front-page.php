@@ -20,7 +20,7 @@ get_header();
                 //custom query for events
                     $today = date('Ymd');
                     $homepageEvents = new WP_Query(array(
-                            'posts_per_page' => -1,
+                            'posts_per_page' => 2,
                             'post_type' => 'event',
                             'meta_key' => 'event_date',
                             'orderby' => 'meta_value_num',
@@ -49,7 +49,7 @@ get_header();
                             </span>
                             <span class="event-summary__day">
                                 <?php
-                                $eventDate = new DateTime(get_field('event_date'));
+//                                $eventDate = new DateTime(get_field('event_date'));
                                 echo $eventDate->format('d');
                                 ?>
                             </span>

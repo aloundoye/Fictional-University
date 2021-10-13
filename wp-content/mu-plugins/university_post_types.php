@@ -20,3 +20,4 @@
 	}
 add_action('init', 'university_post_types');
 
+
