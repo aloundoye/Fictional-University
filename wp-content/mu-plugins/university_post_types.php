@@ -2,11 +2,11 @@
 	//callback function for adding post types
 	function university_post_types(){
 		register_post_type('event', array(
-			'supports' => array('title', 'editor', 'excerpt'),
+			'show_in_rest' => true,
+			'supports' => array('title', 'editor' , 'excerpt'),
 			'rewrite' => array('slug' => 'events'),
 			'has_archive' => true,
 			'public' => true,
-			'show_in_rest' => true,
 			'labels' =>array(
 				'name' => 'Events',
 				'add_new_item' => 'Add New Event',
