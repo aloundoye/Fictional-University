@@ -40,7 +40,7 @@
 		//Professor post type
 		register_post_type('professor', array(
 			'show_in_rest' => true,
-			'supports' => array('title', 'editor' , 'excerpt'),
+			'supports' => array('title', 'editor' , 'excerpt', 'thumbnail'),
 			'public' => true,
 			'labels' =>array(
 				'name' => 'Professors',
