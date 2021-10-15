@@ -3,7 +3,6 @@ get_header();
 
 while (have_posts()){
     the_post(); ?>
-
     <div class="page-banner">
         <div class="page-banner__bg-image"
              style="background-image: url(<?php echo get_theme_file_uri( '/images/ocean.jpg' ) ?> )"></div>
@@ -25,37 +24,87 @@ while (have_posts()){
         </div>
         <div class="generic-content"><?php the_content();?></div>
 	    <?php
-            //custom query for retrieving events related to the current program
-            $today = date('Ymd');
-            $relatedEvents = new WP_Query(array(
-                    'posts_per_page' => 2,
-                    'post_type' => 'event',
-                    'meta_key' => 'event_date',
-                    'orderby' => 'meta_value_num',
-                    'order' => 'ASC',
-                    'meta_query' => array(
-                        array(
-                            'key' => 'event_date',
-                            'compare'=> '>=',
-                            'value' => $today,
-                            'type' => 'numeric'
-                        ),
-                        array(
-                            'key'=>'related_programs',
-                            'compare'=> 'LIKE',
-                            'value' => '"' . get_the_ID() . '"'
-                        )
-                    )
+
+	    //custom query for retrieving professors related to the current program
+            $relatedProfessors = new WP_Query(array(
+                'posts_per_page' => -1,
+                'post_type' => 'professor',
+                'orderby' => 'title',
+                'meta_query' => array(
+                    'key' => 'related_programs',
+                    'compare' => 'LIKE',
+                    'value' => '"' . get_the_ID() . '"'
                 )
-            );
-            if ($relatedEvents->have_posts()){
+            ));
+
+            //display professors related to the current program
+            if ($relatedProfessors->have_posts()){
 	            echo '<hr class="section-break">';
-	            echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
+	            echo '<h2 class="headline headline--medium">Professor teaching ' . get_the_title()  . '</h2>';
 	            //display events related to the current program
-	            while($relatedEvents->have_posts()){
-		            $relatedEvents->the_post();?>
-                    <div class="event-summary">
-                        <a class="event-summary__date t-center" href="#">
+	            while($relatedProfessors->have_posts()){
+		            $relatedProfessors->the_post();?>
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+		            <?php
+	            }
+            }
+	    //custom query for retrieving events related to the current program
+	    $today = date('Ymd');
+	    $relatedEvents = new WP_Query(array(
+			    'posts_per_page' => -1,
+			    'post_type' => 'event',
+			    'meta_key' => 'event_date',
+			    'orderby' => 'meta_value_num',
+			    'order' => 'ASC',
+			    'meta_query' => array(
+				    array(
+					    'key' => 'event_date',
+					    'compare'=> '>=',
+					    'value' => $today,
+					    'type' => 'numeric'
+				    ),
+				    array(
+					    'key'=>'related_programs',
+					    'compare'=> 'LIKE',
+					    'value' => '"' . get_the_ID() . '"'
+				    )
+			    )
+		    )
+	    );
+
+        wp_reset_postdata();
+	    //custom query for retrieving events related to the current program
+	    $today = date('Ymd');
+	    $relatedEvents = new WP_Query(array(
+			    'posts_per_page' => -1,
+			    'post_type' => 'event',
+			    'meta_key' => 'event_date',
+			    'orderby' => 'meta_value_num',
+			    'order' => 'ASC',
+			    'meta_query' => array(
+				    array(
+					    'key' => 'event_date',
+					    'compare'=> '>=',
+					    'value' => $today,
+					    'type' => 'numeric'
+				    ),
+				    array(
+					    'key'=>'related_programs',
+					    'compare'=> 'LIKE',
+					    'value' => '"' . get_the_ID() . '"'
+				    )
+			    )
+		    )
+	    );
+	    //display related events to the current program
+	    if ($relatedEvents->have_posts()){
+		    echo '<hr class="section-break">';
+		    echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
+		    //display events related to the current program
+		    while($relatedEvents->have_posts()){
+			    $relatedEvents->the_post();?>
+                <div class="event-summary">
+                    <a class="event-summary__date t-center" href="#">
                                 <span class="event-summary__month">
                                     <?php
                                     $eventDate = new DateTime(get_field('event_date'));
@@ -63,30 +112,29 @@ while (have_posts()){
                                     ?>
 
                                 </span>
-                            <span class="event-summary__day">
+                        <span class="event-summary__day">
                                     <?php
                                     //$eventDate = new DateTime(get_field('event_date'));
                                     echo $eventDate->format('d');
                                     ?>
                                 </span>
-                        </a>
-                        <div class="event-summary__content">
-                            <h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink();?>"><?php the_title(); ?></a></h5>
-                            <p>
-					            <?php if(has_excerpt()){
-						            echo get_the_excerpt();
-					            } else{
-						            echo wp_trim_words(get_the_content(),18);
-					            }
-					            ?>
-                                <a href="<?php the_permalink();?>" class="nu gray">Learn more</a>
-                            </p>
-                        </div>
+                    </a>
+                    <div class="event-summary__content">
+                        <h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink();?>"><?php the_title(); ?></a></h5>
+                        <p>
+						    <?php if(has_excerpt()){
+							    echo get_the_excerpt();
+						    } else{
+							    echo wp_trim_words(get_the_content(),18);
+						    }
+						    ?>
+                            <a href="<?php the_permalink();?>" class="nu gray">Learn more</a>
+                        </p>
                     </div>
-		            <?php
-	            }
-            }
-
+                </div>
+			    <?php
+		    }
+	    }
 	    ?>
 
 
